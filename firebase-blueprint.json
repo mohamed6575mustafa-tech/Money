@@ -1,0 +1,265 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Authenticated user profile and household membership pointer.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "Firebase Auth UID" },
+        "displayName": { "type": "string", "description": "Display name" },
+        "email": { "type": "string", "description": "Optional email" },
+        "householdId": { "type": "string", "description": "Active household ID" },
+        "role": { "type": "string", "enum": ["ADMIN", "EXPENSE_MANAGER", "MEMBER", "VIEW_ONLY"] },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Server timestamp" },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Server timestamp" }
+      },
+      "required": ["userId", "displayName", "householdId", "role", "createdAt", "updatedAt"]
+    },
+    "HouseholdInvite": {
+      "title": "HouseholdInvite",
+      "description": "Invite lookup document mapping an invite code to a household.",
+      "type": "object",
+      "properties": {
+        "householdId": { "type": "string" },
+        "householdName": { "type": "string" },
+        "ownerId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["householdId", "householdName", "ownerId", "createdAt", "updatedAt"]
+    },
+    "Household": {
+      "title": "Household",
+      "description": "Shared family budget workspace and settings.",
+      "type": "object",
+      "properties": {
+        "ownerId": { "type": "string" },
+        "name": { "type": "string" },
+        "currencyCode": { "type": "string" },
+        "inviteCode": { "type": "string" },
+        "memberUids": { "type": "array" },
+        "monthlyBudgetPiasters": { "type": "integer" },
+        "preventBudgetOverflow": { "type": "boolean" },
+        "rolloverEnabled": { "type": "boolean" },
+        "carriedOverPiasters": { "type": "integer" },
+        "alertThreshold1": { "type": "integer" },
+        "alertThreshold2": { "type": "integer" },
+        "activeYearMonth": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "ownerId",
+        "name",
+        "currencyCode",
+        "inviteCode",
+        "memberUids",
+        "monthlyBudgetPiasters",
+        "preventBudgetOverflow",
+        "rolloverEnabled",
+        "carriedOverPiasters",
+        "alertThreshold1",
+        "alertThreshold2",
+        "activeYearMonth",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "FamilyMember": {
+      "title": "FamilyMember",
+      "description": "Family member and role inside a household.",
+      "type": "object",
+      "properties": {
+        "householdId": { "type": "string" },
+        "userId": { "type": "string" },
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "role": { "type": "string", "enum": ["ADMIN", "EXPENSE_MANAGER", "MEMBER", "VIEW_ONLY"] },
+        "memberUids": { "type": "array" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["householdId", "name", "role", "memberUids", "createdAt", "updatedAt"]
+    },
+    "Category": {
+      "title": "Category",
+      "description": "Expense category with monthly allocation and styling.",
+      "type": "object",
+      "properties": {
+        "householdId": { "type": "string" },
+        "name": { "type": "string" },
+        "iconKey": { "type": "string" },
+        "colorHex": { "type": "integer" },
+        "budgetPiasters": { "type": "integer" },
+        "sortOrder": { "type": "integer" },
+        "customCategory": { "type": "boolean" },
+        "memberUids": { "type": "array" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["householdId", "name", "iconKey", "colorHex", "budgetPiasters", "sortOrder", "customCategory", "memberUids", "createdAt", "updatedAt"]
+    },
+    "Transaction": {
+      "title": "Transaction",
+      "description": "Expense or income financial entry stored in integer piasters.",
+      "type": "object",
+      "properties": {
+        "householdId": { "type": "string" },
+        "type": { "type": "string", "enum": ["EXPENSE", "INCOME"] },
+        "amountPiasters": { "type": "integer" },
+        "categoryId": { "type": "string" },
+        "categoryName": { "type": "string" },
+        "incomeSource": { "type": "string" },
+        "merchant": { "type": "string" },
+        "notes": { "type": "string" },
+        "dateEpochMillis": { "type": "integer" },
+        "yearMonth": { "type": "string" },
+        "receiptUri": { "type": "string" },
+        "addedByUid": { "type": "string" },
+        "addedByName": { "type": "string" },
+        "updatedByName": { "type": "string" },
+        "sourceShoppingItemId": { "type": "string" },
+        "memberUids": { "type": "array" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["householdId", "type", "amountPiasters", "categoryId", "categoryName", "dateEpochMillis", "yearMonth", "addedByUid", "addedByName", "updatedByName", "memberUids", "createdAt", "updatedAt"]
+    },
+    "SinkingFund": {
+      "title": "SinkingFund",
+      "description": "Annual savings allocation fund.",
+      "type": "object",
+      "properties": {
+        "householdId": { "type": "string" },
+        "name": { "type": "string" },
+        "iconKey": { "type": "string" },
+        "targetPiasters": { "type": "integer" },
+        "savedPiasters": { "type": "integer" },
+        "targetDateMillis": { "type": "integer" },
+        "memberUids": { "type": "array" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["householdId", "name", "iconKey", "targetPiasters", "savedPiasters", "targetDateMillis", "memberUids", "createdAt", "updatedAt"]
+    },
+    "FundEntry": {
+      "title": "FundEntry",
+      "description": "Deposit or withdrawal ledger item for a sinking fund (excluded from expenses).",
+      "type": "object",
+      "properties": {
+        "householdId": { "type": "string" },
+        "fundId": { "type": "string" },
+        "entryType": { "type": "string", "enum": ["DEPOSIT", "WITHDRAWAL"] },
+        "amountPiasters": { "type": "integer" },
+        "note": { "type": "string" },
+        "addedByName": { "type": "string" },
+        "dateEpochMillis": { "type": "integer" },
+        "memberUids": { "type": "array" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["householdId", "fundId", "entryType", "amountPiasters", "addedByName", "dateEpochMillis", "memberUids", "createdAt", "updatedAt"]
+    },
+    "ShoppingItem": {
+      "title": "ShoppingItem",
+      "description": "Periodic shopping list item convertible to an expense.",
+      "type": "object",
+      "properties": {
+        "householdId": { "type": "string" },
+        "name": { "type": "string" },
+        "frequency": { "type": "string", "enum": ["START_OF_MONTH", "WEEKLY", "MONTHLY", "AS_NEEDED"] },
+        "quantityLabel": { "type": "string" },
+        "expectedPricePiasters": { "type": "integer" },
+        "purchased": { "type": "boolean" },
+        "convertedExpenseId": { "type": "string" },
+        "categoryId": { "type": "string" },
+        "memberUids": { "type": "array" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["householdId", "name", "frequency", "quantityLabel", "expectedPricePiasters", "purchased", "categoryId", "memberUids", "createdAt", "updatedAt"]
+    },
+    "InventoryItem": {
+      "title": "InventoryItem",
+      "description": "Home pantry/supplies inventory record.",
+      "type": "object",
+      "properties": {
+        "householdId": { "type": "string" },
+        "name": { "type": "string" },
+        "quantity": { "type": "number" },
+        "minThreshold": { "type": "number" },
+        "unit": { "type": "string" },
+        "expiryEpochMillis": { "type": "integer" },
+        "lastActionNote": { "type": "string" },
+        "memberUids": { "type": "array" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["householdId", "name", "quantity", "minThreshold", "unit", "expiryEpochMillis", "memberUids", "createdAt", "updatedAt"]
+    },
+    "MonthArchive": {
+      "title": "MonthArchive",
+      "description": "Closed monthly budget archive snapshot.",
+      "type": "object",
+      "properties": {
+        "householdId": { "type": "string" },
+        "yearMonth": { "type": "string" },
+        "totalIncomePiasters": { "type": "integer" },
+        "totalExpensePiasters": { "type": "integer" },
+        "budgetPiasters": { "type": "integer" },
+        "rolloverPiasters": { "type": "integer" },
+        "closedAtMillis": { "type": "integer" },
+        "memberUids": { "type": "array" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["householdId", "yearMonth", "totalIncomePiasters", "totalExpensePiasters", "budgetPiasters", "rolloverPiasters", "closedAtMillis", "memberUids", "createdAt", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Owner-only user profile document"
+    },
+    "/householdInvites/{inviteCode}": {
+      "schema": { "$ref": "#/entities/HouseholdInvite" },
+      "description": "Invite lookup document for joining a household"
+    },
+    "/households/{householdId}": {
+      "schema": { "$ref": "#/entities/Household" },
+      "description": "Shared household budget workspace"
+    },
+    "/households/{householdId}/members/{memberId}": {
+      "schema": { "$ref": "#/entities/FamilyMember" },
+      "description": "Household family member roster and roles"
+    },
+    "/households/{householdId}/categories/{categoryId}": {
+      "schema": { "$ref": "#/entities/Category" },
+      "description": "Household expense categories"
+    },
+    "/households/{householdId}/transactions/{transactionId}": {
+      "schema": { "$ref": "#/entities/Transaction" },
+      "description": "Household expenses and income records"
+    },
+    "/households/{householdId}/funds/{fundId}": {
+      "schema": { "$ref": "#/entities/SinkingFund" },
+      "description": "Household annual sinking funds"
+    },
+    "/households/{householdId}/fundEntries/{entryId}": {
+      "schema": { "$ref": "#/entities/FundEntry" },
+      "description": "Deposits and withdrawals for sinking funds"
+    },
+    "/households/{householdId}/shoppingItems/{itemId}": {
+      "schema": { "$ref": "#/entities/ShoppingItem" },
+      "description": "Periodic shopping list items"
+    },
+    "/households/{householdId}/inventoryItems/{itemId}": {
+      "schema": { "$ref": "#/entities/InventoryItem" },
+      "description": "Home inventory items"
+    },
+    "/households/{householdId}/monthArchives/{archiveId}": {
+      "schema": { "$ref": "#/entities/MonthArchive" },
+      "description": "Closed monthly budget archives"
+    }
+  }
+}

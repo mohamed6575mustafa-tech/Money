@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">مصروف البيت</string>
+    <string name="app_tagline">خطط .. سجل .. وفر</string>
+    <string name="sign_in_google">تسجيل الدخول بحساب Google</string>
+    <string name="continue_local">المتابعة محلياً بدون حساب</string>
+    <string name="local_mode_notice">الوضع المحلي يحفظ بياناتك بأمان على هذا الجهاز فقط دون مزامنة سحابية مع أفراد الأسرة. يمكنك تسجيل الدخول لاحقاً للمزامنة.</string>
+</resources>
